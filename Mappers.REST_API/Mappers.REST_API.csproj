@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.REST_API\Common.REST_API.csproj" />
+    <ProjectReference Include="..\Entities.REST_API\Entities.REST_API.csproj" />
+    <ProjectReference Include="..\Models.REST_API\Models.REST_API.csproj" />
+  </ItemGroup>
+
+</Project>

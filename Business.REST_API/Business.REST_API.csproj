@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Entities.REST_API\Entities.REST_API.csproj" />
+    <ProjectReference Include="..\Mappers.REST_API\Mappers.REST_API.csproj" />
+    <ProjectReference Include="..\Respository.REST_API\Repository.REST_API.csproj" />
+    <ProjectReference Include="..\ViewModels.REST_API\ViewModels.REST_API.csproj" />
+  </ItemGroup>
+</Project>

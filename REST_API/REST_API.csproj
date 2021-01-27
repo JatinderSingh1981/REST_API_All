@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.16.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="5.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Business.REST_API\Business.REST_API.csproj" />
+    <ProjectReference Include="..\Common.REST_API\Common.REST_API.csproj" />
+    <ProjectReference Include="..\DBContext.REST_API\DBContext.REST_API.csproj" />
+    <ProjectReference Include="..\Infrastructure.REST_API\Infrastructure.REST_API.csproj" />
+    <ProjectReference Include="..\ViewModels.REST_API\ViewModels.REST_API.csproj" />
+  </ItemGroup>
+
+
+</Project>
