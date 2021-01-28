@@ -5,48 +5,13 @@ using Common.REST_API;
 using Entity = Entities.REST_API;
 namespace REST_API.Mapper
 {
-
-
-    //public class MemberValueResolver : IMemberValueResolver<object, object, decimal, decimal>
-    //{
-    //    private readonly IOptions<AppSettings> _settings;
-    //    private readonly decimal priceMarkup;
-    //    public MemberValueResolver(IOptions<AppSettings> settings)
-    //    {
-    //        _settings = settings;
-    //        priceMarkup = _settings.Value.PriceMarkup;
-    //    }
-    //    public decimal Resolve(object source, object destination, decimal sourceMember, decimal destinationMember, ResolutionContext context)
-    //    {
-    //        return (sourceMember) + ((priceMarkup / 100m) * sourceMember);
-    //    }
-    //}
-
-
-    //public class ValueResolver : IValueResolver<Entities.Product, Product, decimal>
-    //{
-    //    private readonly IOptions<AppSettings> _settings;
-    //    private readonly decimal priceMarkup;
-    //    public ValueResolver(IOptions<AppSettings> settings)
-    //    {
-    //        _settings = settings;
-    //        priceMarkup = _settings.Value.PriceMarkup;
-    //    }
-    //    public decimal Resolve(Entities.Product source, Product destination, decimal sourceMember, ResolutionContext context)
-    //    {
-    //        return (source.UnitPrice) + ((priceMarkup / 100m) * source.UnitPrice);
-    //    }
-    //}
-
     public class ProductMapper : AutoMapper.Profile
     {
         public ProductMapper()
         {
-            //CreateMap<ProductDTO, Product>()
-            //    .ForMember(dest => dest.PriceWithMarkup, opt => opt.MapFrom<MemberValueResolver, decimal>(src => src.UnitPrice));
 
             #region Map from entity to model
-            CreateMap<Entity.Product, Product>();
+            CreateMap<Entity.Product, Product>().IncludeAllDerived();
 
             CreateMap<Entity.ProductDesktop, ProductDesktop>()
                 .ForMember(m => m.ProductId, e => e.MapFrom(et => et.Product.ProductId))
@@ -85,7 +50,7 @@ namespace REST_API.Mapper
             #endregion
 
             #region Map from Model to Entity
-            CreateMap<Product, Entity.Product>();
+            CreateMap<Product, Entity.Product>().IncludeAllDerived();
 
             CreateMap<ProductDesktop, Entity.ProductDesktop>()
                 .ForMember(e => e.Product, m => m.MapFrom(et => new Product()

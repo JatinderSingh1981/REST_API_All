@@ -53,12 +53,19 @@ namespace REST_API
 
             #region DI
             services.AddTransient<ProductsResponse>();
-            services.AddTransient(typeof(ProductResponse<>));
+            services.AddTransient<ProductResponse>();
+            //services.AddTransient(typeof(ProductResponse<>));
             //services.AddTransient<IProductBusiness<>, ProductBusiness<>>();
-            services.AddTransient(typeof(IProductBusiness<,>), typeof(ProductBusiness<,>)); //This is parent class
-            services.AddTransient(typeof(DesktopProductBusiness<,>)); //This is child class
-            //services.AddTransient<IProductRepository, ProductRepository>();
-            services.AddTransient(typeof(IProductBaseRepository<>), typeof(ProductBaseRepository<>));
+
+            services.AddTransient<IProductBusiness, ProductBusiness>(); //This is parent class
+            services.AddTransient<IProductBusiness, DesktopProductBusiness>(); //This is child class
+            services.AddTransient<IProductBusiness, LaptopProductBusiness>();
+
+            //services.AddTransient(typeof(IProductBusiness<,>), typeof(ProductBusiness<,>)); //This is parent class
+            //services.AddTransient(typeof(DesktopProductBusiness<,>)); //This is child class
+
+            services.AddTransient<IProductRepository, ProductRepository>();
+            //services.AddTransient(typeof(IProductBaseRepository<>), typeof(ProductBaseRepository<>));
             #endregion
 
             //Add other urls here

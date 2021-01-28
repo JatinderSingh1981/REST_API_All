@@ -12,17 +12,17 @@ using Entity = Entities.REST_API;
 
 namespace Business.REST_API
 {
-    public class ProductBusiness<T, S> : IProductBusiness<T, S> where T : Product where S : class
+    public class ProductBusiness : IProductBusiness
     {
-        private readonly IProductBaseRepository<S> _productRepository;
+        private readonly IProductRepository _productRepository;
         private readonly ProductsResponse _productsResponse;
-        private readonly ProductResponse<T> _productResponse;
-        private readonly ILogger<ProductBusiness<T, S>> _logger;
+        private readonly ProductResponse _productResponse;
+        private readonly ILogger<ProductBusiness> _logger;
         private readonly IMapper _mapper;
 
-        public ProductBusiness(IProductBaseRepository<S> productRepository,
-            ProductResponse<T> productResponse, ProductsResponse productsResponse,
-            IMapper mapper, ILogger<ProductBusiness<T, S>> logger)
+        public ProductBusiness(IProductRepository productRepository,
+            ProductResponse productResponse, ProductsResponse productsResponse,
+            IMapper mapper, ILogger<ProductBusiness> logger)
         {
             _productRepository = productRepository;
             _productsResponse = productsResponse;
@@ -56,34 +56,34 @@ namespace Business.REST_API
             return _productsResponse;
         }
 
-        public virtual async Task<ProductResponse<T>> GetProductById(int productId)
+        public virtual async Task<ProductResponse> GetProductById<T>(int productId) where T : class
         {
-            throw new Exception("Not implemented");
-            //try
-            //{
-            //    _productResponse.IsSuccess = false;
-            //    _productResponse.Message = "Product Not Found";
 
-            //    var product = await _productRepository.GetProduct(x => x.ProductId == productId);
+            try
+            {
+                _productResponse.IsSuccess = false;
+                _productResponse.Message = "Product Not Found";
 
-            //    if (product != null)
-            //    {
-            //        var result = _mapper.Map<ProductDesktop>(product);
-            //        _productResponse.Product = result;
-            //        _productResponse.IsSuccess = true;
-            //        _productResponse.Message = "Product Returned Successfully";
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.LogError("[GetProductById] -> {ErrorMessage}", ex.StackTrace);
-            //    _productResponse.Message = ex.Message;
-            //}
-            //_logger.LogDebug("[GetProductById] -> {Message}", _productResponse.Message);
-            //return _productResponse;
+                var product = await _productRepository.GetProduct<Product>(x => x.ProductId == productId, false);
+
+                if (product != null)
+                {
+                    var result = _mapper.Map<ProductDesktop>(product);
+                    _productResponse.Product = result;
+                    _productResponse.IsSuccess = true;
+                    _productResponse.Message = "Product Returned Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("[GetProductById] -> {ErrorMessage}", ex.StackTrace);
+                _productResponse.Message = ex.Message;
+            }
+            _logger.LogDebug("[GetProductById] -> {Message}", _productResponse.Message);
+            return _productResponse;
         }
 
-        public virtual async Task<ProductResponse<T>> AddProduct(T model)
+        public virtual async Task<ProductResponse> AddProduct<T>(T model) where T : class
         {
             throw new Exception("Not implemented");
             //    try
@@ -147,17 +147,17 @@ namespace Business.REST_API
     }
 
 
-    public class DesktopProductBusiness<T, S> : ProductBusiness<ProductDesktop, Entity.ProductDesktop>
+    public class DesktopProductBusiness : ProductBusiness
     {
-        private readonly IProductBaseRepository<Entity.ProductDesktop> _productRepository;
+        private readonly IProductRepository _productRepository;
         private readonly ProductsResponse _productsResponse;
-        private readonly ProductResponse<ProductDesktop> _productResponse;
-        private readonly ILogger<DesktopProductBusiness<ProductDesktop, Entity.ProductDesktop>> _logger;
+        private readonly ProductResponse _productResponse;
+        private readonly ILogger<DesktopProductBusiness> _logger;
         private readonly IMapper _mapper;
 
-        public DesktopProductBusiness(IProductBaseRepository<Entity.ProductDesktop> productRepository,
-            ProductResponse<ProductDesktop> productResponse, ProductsResponse productsResponse,
-            IMapper mapper, ILogger<DesktopProductBusiness<ProductDesktop, Entity.ProductDesktop>> logger)
+        public DesktopProductBusiness(IProductRepository productRepository,
+            ProductResponse productResponse, ProductsResponse productsResponse,
+            IMapper mapper, ILogger<DesktopProductBusiness> logger)
             : base(productRepository, productResponse, productsResponse, mapper, logger)
         {
             _productRepository = productRepository;
@@ -167,14 +167,14 @@ namespace Business.REST_API
             _logger = logger;
         }
 
-        public override async Task<ProductResponse<ProductDesktop>> GetProductById(int productId)
+        public override async Task<ProductResponse> GetProductById<T>(int productId) where T : class
         {
             try
             {
                 _productResponse.IsSuccess = false;
                 _productResponse.Message = "Product Not Found";
 
-                var product = await _productRepository.GetProduct(x => x.ProductId == productId);
+                var product = await _productRepository.GetProduct<Entity.ProductDesktop>(x => x.ProductId == productId);
 
                 if (product != null)
                 {
@@ -193,7 +193,7 @@ namespace Business.REST_API
             return _productResponse;
         }
 
-        public override async Task<ProductResponse<ProductDesktop>> AddProduct(ProductDesktop model)
+        public override async Task<ProductResponse> AddProduct<T>(T model) where T : class
         {
             try
             {
@@ -203,7 +203,7 @@ namespace Business.REST_API
                 //Add Business Validation here so that same product cannot be added twice
 
                 var mappedProduct = _mapper.Map<Entity.ProductDesktop>(model);
-                var existingProduct = await _productRepository.GetProduct
+                var existingProduct = await _productRepository.GetProduct<Entity.ProductDesktop>
                     (x => x.Product.ComputerTypeId == mappedProduct.Product.ComputerTypeId
                         && x.Product.ProcessorId == mappedProduct.Product.ProcessorId
                         && x.Product.BrandId == mappedProduct.Product.BrandId
@@ -236,17 +236,17 @@ namespace Business.REST_API
 
     }
 
-    public class LaptopProductBusiness<T, S> : ProductBusiness<ProductLaptop, Entity.ProductLaptop>
+    public class LaptopProductBusiness : ProductBusiness
     {
-        private readonly IProductBaseRepository<Entity.ProductLaptop> _productRepository;
+        private readonly IProductRepository _productRepository;
         private readonly ProductsResponse _productsResponse;
-        private readonly ProductResponse<ProductLaptop> _productResponse;
-        private readonly ILogger<LaptopProductBusiness<ProductLaptop, Entity.ProductLaptop>> _logger;
+        private readonly ProductResponse _productResponse;
+        private readonly ILogger<LaptopProductBusiness> _logger;
         private readonly IMapper _mapper;
 
-        public LaptopProductBusiness(IProductBaseRepository<Entity.ProductLaptop> productRepository,
-            ProductResponse<ProductLaptop> productResponse, ProductsResponse productsResponse,
-            IMapper mapper, ILogger<LaptopProductBusiness<ProductLaptop, Entity.ProductLaptop>> logger)
+        public LaptopProductBusiness(IProductRepository productRepository,
+            ProductResponse productResponse, ProductsResponse productsResponse,
+            IMapper mapper, ILogger<LaptopProductBusiness> logger)
             : base(productRepository, productResponse, productsResponse, mapper, logger)
         {
             _productRepository = productRepository;
@@ -256,14 +256,14 @@ namespace Business.REST_API
             _logger = logger;
         }
 
-        public override async Task<ProductResponse<ProductLaptop>> GetProductById(int productId)
+        public override async Task<ProductResponse> GetProductById<T>(int productId) where T : class
         {
             try
             {
                 _productResponse.IsSuccess = false;
                 _productResponse.Message = "Product Not Found";
 
-                var product = await _productRepository.GetProduct(x => x.ProductId == productId);
+                var product = await _productRepository.GetProduct<Entity.ProductLaptop>(x => x.ProductId == productId);
 
                 if (product != null)
                 {
@@ -282,7 +282,7 @@ namespace Business.REST_API
             return _productResponse;
         }
 
-        public override async Task<ProductResponse<ProductLaptop>> AddProduct(ProductLaptop model)
+        public override async Task<ProductResponse> AddProduct<T>(T model) where T : class
         {
             try
             {
@@ -292,12 +292,11 @@ namespace Business.REST_API
                 //Add Business Validation here so that same product cannot be added twice
 
                 var mappedProduct = _mapper.Map<Entity.ProductLaptop>(model);
-                var existingProduct = await _productRepository.GetProduct
+                var existingProduct = await _productRepository.GetProduct<Entity.ProductLaptop>
                     (x => x.Product.ComputerTypeId == mappedProduct.Product.ComputerTypeId
                         && x.Product.ProcessorId == mappedProduct.Product.ProcessorId
                         && x.Product.BrandId == mappedProduct.Product.BrandId
                         && x.ScreenSize == mappedProduct.ScreenSize);
-
                 //Similar product already exists, return from here
                 if (existingProduct != null)
                 {
@@ -306,9 +305,10 @@ namespace Business.REST_API
                 }
 
                 var newProduct = await _productRepository.AddProduct(mappedProduct);
+
                 if (newProduct != null)
                 {
-                    var result = _mapper.Map<ProductLaptop>(newProduct);
+                    var result = _mapper.Map<ProductDesktop>(newProduct);
                     _productResponse.Product = result;
                     _productResponse.IsSuccess = true;
                     _productResponse.Message = "Product Saved Successfully";
@@ -324,5 +324,4 @@ namespace Business.REST_API
         }
 
     }
-
 }
